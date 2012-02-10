@@ -118,6 +118,13 @@ function! s:JSLint()
     return
   endif
 
+  "set efm=%-P%f,
+                    "\%E%>\ #%n\ %m,%Z%.%#Line\ %l\\,\ Pos\ %c,
+                    "\%-G%f\ is\ OK.,%-Q
+  set errorformat=%f:%l:%c:%t:%m
+  " Create empty quickfix list
+  cexpr []
+
   highlight link JSLintError SpellBad
 
   if exists("b:cleared")
@@ -190,6 +197,10 @@ function! s:JSLint()
 
       " Add line to quickfix list
       call add(b:qf_list, l:qf_item)
+
+      " Add to quickfix
+      caddexpr expand("%") . ":" . l:line . ":" . b:parts[2] . ":" . l:errorType . ":" . l:errorMessage
+
     endif
   endfor
 
